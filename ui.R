@@ -33,10 +33,15 @@ ui <- material_page(
                                       label = "Type of 510k",
                                       choices = c("Traditional" = "traditional",
                                                   "Special" = "special")),
+                
                 material_dropdown(input_id = "pr_code",label = "Product code", selected = "|GZB| : Stimulator, Spinal-Cord, Implanted (Pain Relief)",
                                   choices = c("other",unique(vresults$pcode_name))),
                 
+                material_dropdown(input_id = "review_code",label = "Review Advisery Committee", selected = "Neurology",
+                                  choices = c(unique(vresults$REVIEWADVISECOMM))),
                 
+                material_dropdown(input_id = "class_code",label = "Class Advisery Committee", selected = "Neurology",
+                                  choices = c(unique(vresults$REVIEWADVISECOMM)))
                           
             )
         ),
