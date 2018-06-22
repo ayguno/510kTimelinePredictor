@@ -42,7 +42,10 @@ ui <- material_page(
                 material_dropdown(input_id = "class_code",label = "Class Advisery Committee", selected = "|NE| : Neurology",
                                   choices = c(unique(vresults$CLASSADVISECOMM))),
                 
-                material_file_input(input_id = "pdf_file", label = "Upload PDF", color = "INDIGO")
+                material_file_input(input_id = "pdf_file", label = "Upload PDF", color = "INDIGO"),
+                
+                # Switch to start new predictions
+                material_button(input_id = "switch", label = "Predict Time!", depth = 5, color = "INDIGO", icon = "update")
                 
                
                           
