@@ -18,9 +18,7 @@ ui <- material_page(
                                     label = "Number of prior submissions about this device",
                                     initial_value = 0, min_value = 0, max_value = 500),
                 
-                material_slider(input_id = "dev_prior", 
-                                label = "Number of prior submissions about this device",
-                                initial_value = 0, min_value = 0, max_value = 500),
+                material_text_box(input_id = "keywords",label = "Keywords about the device (e.g: Device Name, Intended Use)"),
                 
                 tags$h6("About the sponsor:"),
                 material_slider(input_id = "sp_prior", 
@@ -29,19 +27,24 @@ ui <- material_page(
                 
                 
                 tags$h6("About the anticipated submission:"),
+        
                 material_radio_button(input_id = "sub_type",
                                       label = "Type of 510k",
                                       choices = c("Traditional" = "traditional",
                                                   "Special" = "special")),
                 
                 material_dropdown(input_id = "pr_code",label = "Product code", selected = "|GZB| : Stimulator, Spinal-Cord, Implanted (Pain Relief)",
-                                  choices = c("other",unique(vresults$pcode_name))),
+                                  choices = c("Unknown",unique(vresults$pcode_name))),
                 
-                material_dropdown(input_id = "review_code",label = "Review Advisery Committee", selected = "Neurology",
+                material_dropdown(input_id = "review_code",label = "Review Advisery Committee", selected = "|SU| : General Plastic Surgery",
                                   choices = c(unique(vresults$REVIEWADVISECOMM))),
                 
-                material_dropdown(input_id = "class_code",label = "Class Advisery Committee", selected = "Neurology",
-                                  choices = c(unique(vresults$REVIEWADVISECOMM)))
+                material_dropdown(input_id = "class_code",label = "Class Advisery Committee", selected = "|NE| : Neurology",
+                                  choices = c(unique(vresults$CLASSADVISECOMM))),
+                
+                material_file_input(input_id = "pdf_file", label = "Upload PDF", color = "INDIGO")
+                
+               
                           
             )
         ),
