@@ -32,7 +32,11 @@ ui <- material_page(
                 material_radio_button(input_id = "sub_type",
                                       label = "Type of 510k",
                                       choices = c("Traditional" = "traditional",
-                                                  "Special" = "special"))
+                                                  "Special" = "special")),
+                material_dropdown(input_id = "pr_code",label = "Product code", selected = "|GZB| : Stimulator, Spinal-Cord, Implanted (Pain Relief)",
+                                  choices = c("other",unique(vresults$pcode_name))),
+                
+                
                           
             )
         ),
