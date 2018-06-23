@@ -16,7 +16,8 @@ collect_user_input <- function(dev_prior,
     require(hunspell)
     require(pdftools)
     require(stringr)
-    require(tesseract)    
+    require(tesseract)
+    require(qdapRegex)
     
     user_input <- data.frame(DEVICENAME_PRIOR_CLEARANCE_TO_DATE = 0,
                              APPLICANT_PRIOR_CLEARANCE_TO_DATE = 0,
@@ -32,7 +33,9 @@ collect_user_input <- function(dev_prior,
     user_input$TEXT_FEATURES <- paste(user_input$TEXT_FEATURES,paste0("reviewadvisecomm",tolower(substr(gsub("\\|","",review_code),1,2))),sep = " ")
     user_input$TEXT_FEATURES <- paste(user_input$TEXT_FEATURES,paste0("classadvisecomm",tolower(substr(gsub("\\|","",class_code),1,2))),sep = " ")
     
+    #########################################################
     # If user supplies a PDF file, extract text contents 
+    #########################################################
     if (!is.null(pdf_file)) {
         
         cat("PDF loaded by user... \n")
@@ -41,9 +44,38 @@ collect_user_input <- function(dev_prior,
         # of the pdf text into a single character string object:
         txt <- paste(pdf_text(pdfurl), sep = " ", collapse = "~")
         closeAllConnections()
+        cat("Completed reading PDF... \n")
         
         # Check if pdf text is empty: implies pdf is image
         pdf_check <- gsub("~","", txt)
+        
+        if(pdf_check != ""){
+            
+            # Perform a spellcheck using hunspell package at this point
+            cat("Performing a spellcheck...\n")
+            bad_words <- hunspell(txt)
+            bad_words[[1]]
+            suggestions <- hunspell_suggest(bad_words[1][[1]])
+            # Get the first suggestion for each 'bad word'
+            suggestions <- sapply(suggestions, function(x){
+                return(x[1])})
+            if(length(suggestions) > 0){
+                conversion_table <- data.frame(bad_words = bad_words[1][[1]],
+                                               suggestions = suggestions, stringsAsFactors = FALSE)
+                # Don't keep NAs
+                conversion_table <- conversion_table[complete.cases(conversion_table),]
+                if (nrow(conversion_table) >0){
+                    # Last step is to replace all bad words with the selected ones
+                    for (replacing in 1:nrow(conversion_table)){
+                        txt <- gsub(pattern = conversion_table$bad_words[replacing],
+                                    replacement = conversion_table$suggestions[replacing],
+                                    x = txt)}
+                }
+                
+            }# End of spellcheck 
+            cat("...completed spellcheck.\n")
+        
+        }
         
         # if pdf is image, perform image processing
         if(pdf_check == ""){
@@ -96,9 +128,26 @@ collect_user_input <- function(dev_prior,
         #Attach the text extracted from pdf to other text features
         user_input$TEXT_FEATURES <- paste(user_input$TEXT_FEATURES,txt,sep = " ")    
         
-        #cat(txt,"\n")   
         
+        
+        
+        #cat(txt,"\n")   
+     #####################################################################################   
     }# End of user PDF option
+     #####################################################################################
+    
+    ######################################################################################
+    # Final clean the text features
+    # retain only alphanumeric characters
+    user_input$TEXT_FEATURES <- gsub("[^A-Za-z0-9 ]","",user_input$TEXT_FEATURES)
+    # remove extra whitespace
+    user_input$TEXT_FEATURES <- gsub("\\s+", " ", str_trim(user_input$TEXT_FEATURES))
+    # Lowercase
+    user_input$TEXT_FEATURES <- tolower(user_input$TEXT_FEATURES)
+    # remove extremely long words (any 'word' above 25 characters will be removed, 
+    # since they are likely to be text recognition errors)
+    user_input$TEXT_FEATURES <- rm_nchar_words(user_input$TEXT_FEATURES,n = "25,")
+    ######################################################################################
     
     return(user_input)
     
