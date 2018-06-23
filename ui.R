@@ -6,6 +6,10 @@ ui <- material_page(
     tags$h3("Page Content"),
     nav_bar_color = "deep-purple darken-3",
     
+    tags$head(
+        tags$style(HTML("h6 {color: #2e1baa; font-weight: bold}"))
+    ),
+    
     material_row(
     
         # Column to keep inputs
@@ -55,9 +59,16 @@ ui <- material_page(
         # Column to present plot
         material_column(width = 4,
                         
-                        material_card(title = "Current predictions for similar devices",
-                                      depth = 5
+                        material_card(title = "",
+                                      depth = 5,
+                        
+                        plotlyOutput(outputId = "pred_plot"),
+                        tags$br(),
+                        htmlOutput(outputId = "subtitle1"),
+                        htmlOutput(outputId = "subtitle2")
+                                      
                         )
+                        
         ),
         
         # Column to provide some metrics
