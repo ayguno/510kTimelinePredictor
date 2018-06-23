@@ -49,7 +49,7 @@ ui <- material_page(
                 material_file_input(input_id = "pdf_file", label = "Upload PDF", color = "INDIGO"),
                 
                 # Switch to start new predictions
-                material_button(input_id = "switch", label = "Predict Time!", depth = 5, color = "INDIGO", icon = "update")
+                material_button(input_id = "switch", label = "Predict Time!", depth = 5,color = "purple accent-3", icon = "update")
                 
                
                           

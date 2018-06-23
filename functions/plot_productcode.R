@@ -18,7 +18,7 @@ plot_productcode <- function(results,pcode){
     d <- subdata$PREDICTION
     
     p<- ggplot(data = subdata)+
-        geom_point(data = subdata,color = "navy", size = 4, 
+        geom_point(data = subdata,color = "navy", size = 4,alpha = 0.5, 
                    aes(x = PREDICTION, y = DECISIONTIME,
                        text = sprintf("KNUMBER: %s<br>DEVICENAME: %s", a,b)))+
         geom_abline(x = c(0,0), y = c(1000,1000), linetype = "dashed", size = 1, color = "magenta")+
