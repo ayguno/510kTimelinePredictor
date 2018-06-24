@@ -1,3 +1,4 @@
+library(reticulate)
 library(shiny)
 library(shinymaterial)
 
@@ -75,7 +76,10 @@ ui <- material_page(
         material_column(width = 4,
                         
                         material_card(title = "This process might take...",
-                                      depth = 5
+                                      depth = 5,
+                        
+                        htmlOutput(outputId = "prediction")                            
+                                      
                         )
         )
         

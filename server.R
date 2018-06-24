@@ -1,8 +1,8 @@
-
+library(reticulate)
 library(shiny)
 library(shinymaterial)
 
-server <- function(input, output) {
+server <- function(input, output, session) {
     
     observeEvent(input$switch,{
     
@@ -16,8 +16,28 @@ server <- function(input, output) {
     class_code <- input$class_code
     pdf_file <- input$pdf_file  
         
-     
+    material_spinner_show(session, "prediction")
+    
     user_input <<- collect_user_input(dev_prior,sp_prior,keywords,sub_type,pr_code,review_code,class_code,pdf_file)
+    
+    ##############################################################################################
+    #
+    # Using Python scripts to process user input and return a prediction from saved model objects
+    #
+    # Next steps: App works locally using main Anaconda 3 (C:\Users\OZAN\ANACON~1\),but fails when deployed to server
+    # We need to establish a virtual python environment with required dependencies and give another try
+    ##############################################################################################
+    source_python("./functions/make_predictions.py")
+    preds <- make_prediction(r_to_py(user_input))
+    ##############################################################################################
+    
+    material_spinner_hide(session, "prediction")
+    
+    output$prediction <- renderUI(
+        
+        tags$h3(paste0(preds," days."))
+        
+    )
     
     # Produce prediction plot in middle column from validation results
     # If a product code is available prepare the plot based on product code
@@ -40,22 +60,9 @@ server <- function(input, output) {
         subtitle_text2 <- paste0("MAE: ",plist$mae)
     }
     
-    output$pred_plot <- renderPlotly(
-        
-        ggplotly(p)
-    )
-    
-    output$subtitle1 <- renderUI(
-        
-        tags$h6(subtitle_text1)
-        
-    )
-    
-    output$subtitle2 <- renderUI(
-        
-        tags$h6(subtitle_text2)
-        
-    )
+    output$pred_plot <- renderPlotly(ggplotly(p))
+    output$subtitle1 <- renderUI(tags$h6(subtitle_text1))
+    output$subtitle2 <- renderUI(tags$h6(subtitle_text2))
     
     
     }, ignoreNULL = FALSE, ignoreInit = FALSE) #End of "switch" button observer
