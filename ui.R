@@ -1,3 +1,4 @@
+reticulate::use_virtualenv('510kTimelinePredictor', required = T)
 library(reticulate)
 library(shiny)
 library(shinymaterial)
