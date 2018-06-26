@@ -19,18 +19,25 @@ ui <- material_page(
             
             material_card(title = "Tell me a little bit about this product",
                           depth = 5,
-                tags$h6("About the device:"),
-                material_slider(input_id = "dev_prior", 
-                                    label = "Number of prior submissions about this device",
-                                    initial_value = 0, min_value = 0, max_value = 500),
+                          
+                material_row(
                 
-                material_text_box(input_id = "keywords",label = "Keywords about the device (e.g: Device Name, Intended Use)"),
+                    material_column(width = 6,              
+                        tags$h6("About the device:"),
+                        material_slider(input_id = "dev_prior", 
+                                            label = "Number of prior submissions about this device",
+                                            initial_value = 0, min_value = 0, max_value = 500),
+                        
+                        material_text_box(input_id = "keywords",label = "Keywords about the device (e.g: Device Name, Intended Use)")
+                    ),
+                    material_column(width = 6, 
+                        tags$h6("About the sponsor:"),
+                        material_slider(input_id = "sp_prior", 
+                                        label = "Number of prior submissions from this sponsor",
+                                        initial_value = 0, min_value = 0, max_value = 500, color = "#ef5350")
+                    )
                 
-                tags$h6("About the sponsor:"),
-                material_slider(input_id = "sp_prior", 
-                                label = "Number of prior submissions from this sponsor",
-                                initial_value = 0, min_value = 0, max_value = 500, color = "#ef5350"),
-                
+                ),
                 
                 tags$h6("About the anticipated submission:"),
         
