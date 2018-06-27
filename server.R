@@ -29,7 +29,7 @@ server <- function(input, output, session) {
     # We need to establish a virtual python environment with required dependencies and give another try
     ##############################################################################################
     source_python("./functions/make_predictions.py")
-    preds <- make_prediction(r_to_py(user_input))
+    preds <- round(make_prediction(r_to_py(user_input)),2)
     ##############################################################################################
     
     material_spinner_hide(session, "prediction")
