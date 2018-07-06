@@ -5,13 +5,17 @@ library(shinymaterial)
 
 ui <- material_page(
     title = " 510k Timeline Predictor",
-    tags$h3("Page Content"),
-    nav_bar_color = "deep-purple darken-3",
+    
+    material_parallax(
+    image_source = "vermont.jpg"
+    ),
+   # tags$h3("Page Content"),
+    nav_bar_color = 'green darken-4',
     
     tags$head(
         tags$style(HTML("h6 {color: #2e1baa; font-weight: bold;
                             }.shiny-notification {
-                                              background-color:#360160;
+                                              background-color:#6a1b9a;
                                               color: #fff;
                                               font-size: 15pt;
                                               height: 100px;
@@ -126,7 +130,30 @@ ui <- material_page(
                                        material_column(width = 9,
                                          htmlOutput(outputId = "prediction")
                                        )
-                                 )    
+                                       
+                                 ),
+                                 material_row(
+                                       material_column(width = 3,{}),
+                                       material_column(width = 7,
+                                                       material_modal(
+                                                         modal_id = "example_modal",
+                                                         floating_button = FALSE,
+                                                         button_depth = 5,
+                                                         button_color = "purple accent-3",
+                                                         button_text = "How does it work?",
+                                                         button_icon = "open_in_browser",
+                                                         title = "510(k) Timeline Predictor App",
+                                                         tags$p("This application is built on a unique principle that
+                                                                integrates Python and R computing languages into an R shiny 
+                                                                web app framework. "),
+                                                         HTML('<center><img src="principle.jpg", width = "700px", height = "400px"></center>')
+                                                         #tags$img(src = "principle.jpg", width = "500px", height = "400px")
+                                                       )
+                                                       
+                                       ),
+                                       material_column(width = 2,{})
+                                 )
+                                 
                         )
                         
                         
@@ -157,12 +184,26 @@ ui <- material_page(
                                       #htmlOutput(outputId = "subtitle1"),
                                       #htmlOutput(outputId = "subtitle2")
                                       
-                        )
+                        ),
+                        material_modal(modal_id = "disclaimer",
+                                       floating_button = TRUE,
+                                       button_depth = 7,
+                                       close_button_label = "I understand the disclaimer",
+                                       button_color = 'red accent-4',
+                                       button_icon = 'announcement',
+                                       title = "Disclaimer",button_text = "Dislaimer",
+                                       icon("warning"),
+                                       tags$h5("This machine learning application is for limited experimental use only. 
+                                              It was developed solely by using publicly available open data resources. It is not
+                                              affiliated with or endorsed by any regulatory agency and it can not be used
+                                              to predict the exact regulatory decision timeline.")
+                                       )
                         
                         
         )
         
     )
+    
 )
 
 
